@@ -1,0 +1,1 @@
+# StockWise_FrontEnd---Intelligent-Stock-Management-System
