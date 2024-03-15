@@ -7,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import 'hammerjs';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { ToastrModule } from 'ngx-toastr'; // For auth after login toast
+import { ToastrModule } from 'ngx-toastr';
 
 import { CoreModule } from '@core/core.module';
 import { CoreCommonModule } from '@core/common.module';
@@ -17,12 +17,18 @@ import { coreConfig } from 'app/app-config';
 
 import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
+import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';
 import { SampleModule } from 'app/main/sample/sample.module';
+import { CustomToastrComponent } from './shared/components/custom-toastr/custom-toastr.component';
 
 const appRoutes: Routes = [
   {
     path: 'pages',
     loadChildren: () => import('./main/pages/pages.module').then(m => m.PagesModule)
+  },
+  {
+    path: 'user-management',
+    loadChildren: () => import('./modules/user-management/user-management-routing.module').then(m => m.UserManagementRoutingModule)
   },
   {
     path: '',
@@ -36,7 +42,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, CustomToastrComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -59,7 +65,8 @@ const appRoutes: Routes = [
 
     // App modules
     LayoutModule,
-    SampleModule
+    SampleModule,
+    ContentHeaderModule
   ],
 
   bootstrap: [AppComponent]
