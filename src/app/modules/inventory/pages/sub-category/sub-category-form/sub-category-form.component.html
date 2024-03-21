@@ -1,0 +1,82 @@
+<script src="category-form.component.ts"></script>
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+        <!-- content-header component -->
+        <app-content-header [contentHeader]="contentHeader"></app-content-header>
+        <!-- Template Driven Multiple Rules Validation -->
+        <section id="multiple-validation">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-12">
+                            <h6 class="m-1"> Category Form</h6>
+                        </div>
+                        <div class="card-body">
+                            <form class="form-horizontal" (ngSubmit)="(SubCategoryForm.form.valid)" #SubCategoryForm="ngForm">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="SubCategoryName">Category Name</label>
+                                            <input
+                                                    class="form-control input-md"
+                                                    [class.error]="!SubCategoryNameRef.valid && SubCategoryNameRef.touched"
+                                                    ngModel
+                                                    #SubCategoryNameRef="ngModel"
+                                                    required
+                                                    id="SubCategoryName"
+                                                    name="subCategoryName"
+                                                    [(ngModel)]="subCategoryReq.subCategoryName"
+                                                    type="text"
+                                                    placeholder="Your Name"
+                                            />
+                                            <span *ngIf="!SubCategoryNameRef.valid && SubCategoryNameRef.touched" class="invalid-form">
+                                                    <small class="form-text text-danger" *ngIf="SubCategoryNameRef.errors.required">This field is required!</small>
+                                                </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="SubCategoryDescription">Sub Category Description</label>
+                                            <input
+                                                    class="form-control input-md"
+                                                    [class.error]="!SubCategoryDescriptionRef.valid && SubCategoryDescriptionRef.touched"
+                                                    ngModel
+                                                    #SubCategoryDescriptionRef="ngModel"
+                                                    required
+                                                    id="SubSubCategoryDescription"
+                                                    name="categoryDescription"
+                                                    [(ngModel)]="subCategoryReq.description"
+                                                    type="text"
+                                                    placeholder="Your Description"
+                                            />
+                                            <span *ngIf="!SubCategoryDescriptionRef.valid && SubCategoryDescriptionRef.touched" class="invalid-form">
+                                                    <small class="form-text text-danger" *ngIf="SubCategoryDescriptionRef.errors.required">This field is required!</small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <fieldset class="form-group">
+                                            <ng-select
+                                                    [items]="categories"
+                                                    [(ngModel)]="selectedCategory"
+                                                    name="selectedCategory"
+                                                    bindLabel="name"
+                                                    placeholder="Select category"
+                                                    required
+                                                    (change)="getSubCategoryf($event)"
+                                            ></ng-select>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <button type="submit" [disabled]="!SubCategoryForm.form.valid" (click)="submitSubCategory(SubCategoryForm)" class="btn btn-primary" rippleEffect>
+                                    Submit
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--/ Template Driven Multiple Rules Validation -->
+    </div>
+</div>
