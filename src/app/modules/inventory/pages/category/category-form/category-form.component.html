@@ -1,0 +1,70 @@
+<script src="category-form.component.ts"></script>
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+        <!-- content-header component -->
+        <app-content-header [contentHeader]="contentHeader"></app-content-header>
+        <!-- Template Driven Multiple Rules Validation -->
+        <section id="multiple-validation">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-12">
+                            <h6 class="m-1"> Category Form</h6>
+                        </div>
+                        <div class="card-body">
+                            <form class="form-horizontal" (ngSubmit)="(CategoryForm.form.valid)" #CategoryForm="ngForm">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="CategoryName">Category Name</label>
+                                            <input
+                                                    class="form-control input-md"
+                                                    [class.error]="!CategoryNameRef.valid && CategoryNameRef.touched"
+                                                    ngModel
+                                                    #CategoryNameRef="ngModel"
+                                                    required
+                                                    id="CategoryName"
+                                                    name="categoryName"
+                                                    [(ngModel)]="categoryReq.categoryName"
+                                                    type="text"
+                                                    placeholder="Your Name"
+                                            />
+                                            <span *ngIf="!CategoryNameRef.valid && CategoryNameRef.touched" class="invalid-form">
+                                                    <small class="form-text text-danger" *ngIf="CategoryNameRef.errors.required">This field is required!</small>
+                                                </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="status">Status</label>
+                                            <select
+                                                    class="form-control input-md"
+                                                    id="status"
+                                                    [class.error]="!statusRef.valid && statusRef.touched"
+                                                    ngModel
+                                                    name="categoryReq.status"
+                                                    [(ngModel)]="categoryReq.status"
+                                                    required
+                                                    #statusRef="ngModel"
+                                            >
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                            </select>
+                                            <div *ngIf="!statusRef.valid && statusRef.touched" class="invalid-feedback">
+                                                <small class="form-text text-danger">status is required!</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" [disabled]="!CategoryForm.form.valid" (click)="categoryFomrSubmitted(CategoryForm)" class="btn btn-primary" rippleEffect>
+                                    Submit
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--/ Template Driven Multiple Rules Validation -->
+    </div>
+</div>

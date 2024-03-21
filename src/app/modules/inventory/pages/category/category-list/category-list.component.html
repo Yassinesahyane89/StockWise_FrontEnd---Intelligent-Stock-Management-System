@@ -1,0 +1,117 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+        <!-- Category List -->
+        <section class="categories-list-wrapper">
+            <!-- categories filter start -->
+            <div class="card">
+                <h5 class="card-header">Search Filter</h5>
+                <div class="card-body">
+                    <div class="categories-list-filter">
+                        <form>
+                            <div class="row">
+                                <div class="col-12">
+                                    <fieldset class="form-group">
+                                        <ng-select
+                                                [items]="selectStatus"
+                                                [(ngModel)]="selectedStatus"
+                                                name="selectedStatus"
+                                                bindLabel="name"
+                                                placeholder="Select Status"
+                                                (change)="filterByStatus($event)"
+                                        ></ng-select>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- categories filter end -->
+
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="d-flex justify-content-between align-items-center m-1">
+                            <label class="d-flex align-items-center">
+                                Show
+                                <select class="form-control mx-25" [(ngModel)]="selectedOption">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                entries
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12 d-flex justify-content-start justify-content-md-end">
+                        <div class="d-flex align-items-center justify-content-end pr-1 pb-1 pb-md-0">
+                            <label class="d-flex align-items-center ml-1 ml-md-0">Search:
+                                <input
+                                        [(ngModel)]="searchValue"
+                                        name="searchValue"
+                                        type="search"
+                                        class="form-control ml-25"
+                                        (keyup)="filterUpdate($event)"
+                                        (search)="filterUpdate($event)"
+                                />
+                            </label>
+                            <button class="btn btn-primary ml-1">
+                                <a routerLink="/inventory/category/new-category" class="text-white">
+                                    <i data-feather="plus" class="d-sm-none d-inline-block mr-0 mr-sm-1"></i>
+                                    <span class="d-none d-sm-inline-block">Add New Category</span>
+                                </a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <ngx-datatable
+                        [rows]="rows"
+                        [rowHeight]="50"
+                        class="bootstrap core-bootstrap"
+                        [limit]="selectedOption"
+                        [columnMode]="ColumnMode.force"
+                        [headerHeight]="50"
+                        [footerHeight]="50"
+                        [scrollbarH]="true"
+                >
+                    <ngx-datatable-column name="Category" prop="categoryName" [width]="200"></ngx-datatable-column>
+                    <ngx-datatable-column name="Category slug" prop="categorySlug" [width]="200"></ngx-datatable-column>
+                    <ngx-datatable-column name="Created On" prop="createdOn" [width]="200"></ngx-datatable-column>
+                    <ngx-datatable-column name="Status" prop="status" [width]="50">
+                        <ng-template let-status="value" ngx-datatable-cell-template>
+                            <div
+                                    class="badge badge-pill"
+                                    [ngClass]="{
+                                      'badge-light-success': status == 'ACTIVE',
+                                      'badge-light-danger': status == 'INACTIVE'
+                                    }">
+                                {{ status }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Actions" [width]="40" [sortable]="false">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                            <div ngbDropdown container="body">
+                                <button ngbDropdownToggle type="button" class="btn icon-btn btn-sm hide-arrow" rippleEffect>
+                                    <span [data-feather]="'more-vertical'" [class]="'cursor-pointer'"></span>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a routerLink="/inventory/category/edit-category/{{ row.id }}" ngbDropdownItem>
+                                        <span [data-feather]="'edit'" [size]="16" [class]="'mr-50'"></span>
+                                        Edit
+                                    </a>
+                                    <a (click)="deleteCategory(row.id)" href="javascript:;" ngbDropdownItem>
+                                        <span [data-feather]="'trash'" [size]="16" [class]="'mr-50'"></span>
+                                        Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </section>
+        <!--/ Category List -->
+    </div>
+</div>
