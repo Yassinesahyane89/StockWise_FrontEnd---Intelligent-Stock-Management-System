@@ -1,0 +1,155 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+        <!-- Product List -->
+        <section class="products-list-wrapper">
+            <!-- products filter start -->
+            <div class="card">
+                <h5 class="card-header">Search Filter</h5>
+                <div class="card-body">
+                    <div class="products-list-filter">
+                        <form>
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <fieldset class="form-group">
+                                        <ng-select
+                                                [items]="selectCategory"
+                                                [(ngModel)]="selectedCategory"
+                                                name="selectedCategory"
+                                                bindLabel="name"
+                                                placeholder="Select Category"
+                                                (change)="filterByCategory($event)"
+                                        ></ng-select>
+                                    </fieldset>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <fieldset class="form-group">
+                                        <ng-select
+                                                [items]="selectSubCategory"
+                                                [(ngModel)]="selectedSubCategory"
+                                                name="selectedSubCategory"
+                                                bindLabel="name"
+                                                placeholder="Select Sub Category"
+                                                (change)="filterBySubCategory($event)"
+                                        ></ng-select>
+                                    </fieldset>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <fieldset class="form-group">
+                                        <ng-select
+                                                [items]="selectBrand"
+                                                [(ngModel)]="selectedBrand"
+                                                name="selectedBrand"
+                                                bindLabel="name"
+                                                placeholder="Select Brand"
+                                                (change)="filterByBrand($event)"
+                                        ></ng-select>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- products filter end -->
+
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="d-flex justify-content-between align-items-center m-1">
+                            <label class="d-flex align-items-center">
+                                Show
+                                <select class="form-control mx-25" [(ngModel)]="selectedOption">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                entries
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12 d-flex justify-content-start justify-content-md-end">
+                        <div class="d-flex align-items-center justify-content-end pr-1 pb-1 pb-md-0">
+                            <label class="d-flex align-items-center ml-1 ml-md-0">Search:
+                                <input
+                                        [(ngModel)]="searchValue"
+                                        name="searchValue"
+                                        type="search"
+                                        class="form-control ml-25"
+                                        (keyup)="filterUpdate($event)"
+                                        (search)="filterUpdate($event)"
+                                />
+                            </label>
+                            <button class="btn btn-primary ml-1">
+                                <a routerLink="/inventory/product/new-product" class="text-white">
+                                    <i data-feather="plus" class="d-sm-none d-inline-block mr-0 mr-sm-1"></i>
+                                    <span class="d-none d-sm-inline-block">Add New Product</span>
+                                </a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <ngx-datatable
+                        [rows]="rows"
+                        [rowHeight]="50"
+                        class="bootstrap core-bootstrap"
+                        [limit]="selectedOption"
+                        [columnMode]="ColumnMode.force"
+                        [headerHeight]="50"
+                        [footerHeight]="50"
+                        [scrollbarH]="true"
+                >
+                    <ngx-datatable-column [width]="5"></ngx-datatable-column>
+                    <ngx-datatable-column name="Product" prop="name" [width]="200">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <span *ngIf="row.name.length > 20">{{ row.name | slice:0:20 }}...</span>
+                            <span *ngIf="row.name.length <= 20">{{ row.name }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Category" prop="category" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Brand" prop="brand" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Price" prop="price" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Quantity" prop="quantity" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Description" [width]="200">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <span *ngIf="row.description.length > 20">{{ row.description | slice:0:20 }}...</span>
+                            <span *ngIf="row.description.length <= 20">{{ row.description }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Status" prop="status" [width]="50">
+                        <ng-template let-status="value" ngx-datatable-cell-template>
+                            <div
+                                    class="badge badge-pill"
+                                    [ngClass]="{
+                                      'badge-light-success': status == 'ACTIVE',
+                                      'badge-light-danger': status == 'INACTIVE'
+                                    }">
+                                {{ status }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Actions" [width]="40" [sortable]="false">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                            <div ngbDropdown container="body">
+                                <button ngbDropdownToggle type="button" class="btn icon-btn btn-sm hide-arrow" rippleEffect>
+                                    <span [data-feather]="'more-vertical'" [class]="'cursor-pointer'"></span>
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <a routerLink="/inventory/product/edit-product/{{ row.id }}" ngbDropdownItem>
+                                        <span [data-feather]="'edit'" [size]="16" [class]="'mr-50'"></span>
+                                        Edit
+                                    </a>
+                                    <a (click)="deleteProduct(row.id)" href="javascript:;" ngbDropdownItem>
+                                        <span [data-feather]="'trash'" [size]="16" [class]="'mr-50'"></span>
+                                        Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </section>
+        <!--/ Product List -->
+    </div>
+</div>

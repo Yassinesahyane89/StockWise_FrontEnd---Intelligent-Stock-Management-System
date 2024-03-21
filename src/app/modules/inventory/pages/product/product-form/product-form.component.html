@@ -1,0 +1,170 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+        <!-- content-header component -->
+        <app-content-header [contentHeader]="contentHeader"></app-content-header>
+        <!-- Template Driven Multiple Rules Validation -->
+        <section id="multiple-validation">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-12">
+                            <h6 class="m-1">Product Form</h6>
+                        </div>
+                        <div class="card-body">
+                            <form class="form-horizontal" (ngSubmit)="(ProductForm.form.valid)" #ProductForm="ngForm">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="ProductName">Product Name</label>
+                                            <input
+                                                    class="form-control input-md"
+                                                    [class.error]="!ProductNameRef.valid && ProductNameRef.touched"
+                                                    ngModel
+                                                    #ProductNameRef="ngModel"
+                                                    required
+                                                    id="ProductName"
+                                                    name="name"
+                                                    [(ngModel)]="productReq.name"
+                                                    type="text"
+                                                    placeholder="Product Name"
+                                            />
+                                            <span *ngIf="!ProductNameRef.valid && ProductNameRef.touched" class="invalid-form">
+                                                    <small class="form-text text-danger" *ngIf="ProductNameRef.errors.required">This field is required!</small>
+                                                    <small class="form-text text-danger" *ngIf="ProductNameRef.errors.email">Invalid email!</small>
+                                                </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="ProductPrice">Product Price</label>
+                                            <input
+                                                    class="form-control input-md"
+                                                    [class.error]="!ProductPriceRef.valid && ProductPriceRef.touched"
+                                                    ngModel
+                                                    #ProductPriceRef="ngModel"
+                                                    required
+                                                    id="ProductPrice"
+                                                    name="price"
+                                                    [(ngModel)]="productReq.price"
+                                                    type="number"
+                                                    placeholder="$ product price"
+                                            />
+                                            <span *ngIf="!ProductPriceRef.valid && ProductPriceRef.touched" class="invalid-form">
+                                                    <small class="form-text text-danger" *ngIf="ProductPriceRef.errors.required">This field is required!</small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="ProductQuantity">Product Quantity</label>
+                                            <input
+                                                    class="form-control input-md"
+                                                    [class.error]="!ProductQuantityRef.valid && ProductQuantityRef.touched"
+                                                    ngModel
+                                                    #ProductQuantityRef="ngModel"
+                                                    required
+                                                    id="ProductQuantity"
+                                                    name="quantity"
+                                                    [(ngModel)]="productReq.quantity"
+                                                    type="number"
+                                                    placeholder="Product Quantity"
+                                            />
+                                            <span *ngIf="!ProductQuantityRef.valid && ProductQuantityRef.touched" class="invalid-form">
+                                                    <small class="form-text text-danger" *ngIf="ProductQuantityRef.errors.required">This field is required!</small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="ProductDescription">Product Description</label>
+                                            <input
+                                                    class="form-control input-md"
+                                                    [class.error]="!ProductDescriptionRef.valid && ProductDescriptionRef.touched"
+                                                    ngModel
+                                                    #ProductDescriptionRef="ngModel"
+                                                    required
+                                                    id="ProductDescription"
+                                                    name="name"
+                                                    [(ngModel)]="productReq.description"
+                                                    type="text"
+                                                    placeholder="Product Name"
+                                            />
+                                            <span *ngIf="!ProductDescriptionRef.valid && ProductDescriptionRef.touched" class="invalid-form">
+                                                    <small class="form-text text-danger" *ngIf="ProductDescriptionRef.errors.required">This field is required!</small>
+                                                </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <fieldset class="form-group">
+                                            <label class="form-control-label">Category</label>
+                                            <ng-select
+                                                    [items]="categories"
+                                                    [(ngModel)]="selectedCategory"
+                                                    name="selectedCategory"
+                                                    bindLabel="name"
+                                                    placeholder="Select category"
+                                                    required
+                                                    (change)="getSubCategory()"
+                                            ></ng-select>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <fieldset class="form-group">
+                                            <label class="form-control-label">Sub Category</label>
+                                            <ng-select
+                                                    [items]="subCategories"
+                                                    [(ngModel)]="selectedSubCategory"
+                                                    name="selectedSubCategory"
+                                                    bindLabel="name"
+                                                    placeholder="Select sub category"
+                                                    required
+                                            ></ng-select>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <fieldset class="form-group">
+                                            <label class="form-control-label">Brand</label>
+                                            <ng-select
+                                                    [items]="brands"
+                                                    [(ngModel)]="selectedBrand"
+                                                    name="selectedBrand"
+                                                    bindLabel="name"
+                                                    placeholder="Select brand"
+                                                    required
+                                            ></ng-select>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="status">Status</label>
+                                            <select
+                                                    class="form-control input-md"
+                                                    id="status"
+                                                    [class.error]="!statusRef.valid && statusRef.touched"
+                                                    ngModel
+                                                    name="productReq.status"
+                                                    [(ngModel)]="productReq.status"
+                                                    required
+                                                    #statusRef="ngModel"
+                                            >
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                            </select>
+                                            <div *ngIf="!statusRef.valid && statusRef.touched" class="invalid-feedback">
+                                                <small class="form-text text-danger">status is required!</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" [disabled]="!ProductForm.form.valid" (click)="productFomrSubmitted(ProductForm)" class="btn btn-primary" rippleEffect>
+                                    Submit
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--/ Template Driven Multiple Rules Validation -->
+    </div>
+</div>
