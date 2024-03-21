@@ -17,12 +17,14 @@ import { ContentHeaderModule } from 'app/layout/components/content-header/conten
 import { UsersRoutingModule } from './users-routing.module';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserFormComponent } from './user-form/user-form.component';
+import { AccountSettingComponent } from './account-setting/account-setting.component';
 
 
 @NgModule({
   declarations: [
     UserListComponent,
-    UserFormComponent
+    UserFormComponent,
+    AccountSettingComponent
   ],
   imports: [
     CommonModule,
