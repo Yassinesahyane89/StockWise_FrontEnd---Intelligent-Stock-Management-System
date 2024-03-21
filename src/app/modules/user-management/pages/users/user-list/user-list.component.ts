@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ColumnMode, DatatableComponent } from '@swimlane/ngx-datatable';
+
 import {UsersService} from "../../../../../core/services/users/users.service";
-import {UserReq} from "../../../../../shared/models/request/user-req.model";
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -18,35 +18,23 @@ export class UserListComponent implements OnInit {
     public ColumnMode = ColumnMode;
     public temp = [];
     public previousRoleFilter = '';
-    public previousPlanFilter = '';
     public previousStatusFilter = '';
 
     public selectRole: any = [
       { name: 'All', value: '' },
-      { name: 'Admin', value: 'Admin' },
-      { name: 'Author', value: 'Author' },
-      { name: 'Editor', value: 'Editor' },
-      { name: 'Maintainer', value: 'Maintainer' },
-      { name: 'Subscriber', value: 'Subscriber' }
-    ];
-
-    public selectPlan: any = [
-      { name: 'All', value: '' },
-      { name: 'Basic', value: 'Basic' },
-      { name: 'Company', value: 'Company' },
-      { name: 'Enterprise', value: 'Enterprise' },
-      { name: 'Team', value: 'Team' }
+      { name: 'Admin', value: 'ADMIN' },
+      { name: 'Manager', value: 'MANAGER' },
+      { name: 'User', value: 'USER' }
     ];
 
     public selectStatus: any = [
       { name: 'All', value: '' },
-      { name: 'Pending', value: 'Pending' },
-      { name: 'Active', value: 'Active' },
-      { name: 'Inactive', value: 'Inactive' }
+      { name: 'Deleted', value: 'DELETED' },
+      { name: 'Active', value: 'ACTIVE' },
+      { name: 'Inactive', value: 'INACTIVE' }
     ];
 
     public selectedRole = [];
-    public selectedPlan = [];
     public selectedStatus = [];
     public searchValue = '';
 
@@ -64,7 +52,6 @@ export class UserListComponent implements OnInit {
 
     // handle success case
     handleSuccess(response) {
-
       // show toast
       this.toastr.success(response.message, 'User', {
         progressBar: true,
@@ -87,7 +74,6 @@ export class UserListComponent implements OnInit {
     filterUpdate(event) {
       // Reset ng-select on search
       this.selectedRole = this.selectRole[0];
-      this.selectedPlan = this.selectPlan[0];
       this.selectedStatus = this.selectStatus[0];
 
       const val = event.target.value.toLowerCase();
@@ -107,49 +93,39 @@ export class UserListComponent implements OnInit {
     filterByRole(event) {
       const filter = event ? event.value : '';
       this.previousRoleFilter = filter;
-      this.temp = this.filterRows(filter, this.previousPlanFilter, this.previousStatusFilter);
-      this.rows = this.temp;
-    }
-
-    // Filter By Plan
-    filterByPlan(event) {
-      const filter = event ? event.value : '';
-      this.previousPlanFilter = filter;
-      this.temp = this.filterRows(this.previousRoleFilter, filter, this.previousStatusFilter);
+      this.temp = this.filterRows(filter, this.previousStatusFilter);
       this.rows = this.temp;
     }
 
     // Filter By Status
     filterByStatus(event) {
+        console.log(event);
       const filter = event ? event.value : '';
       this.previousStatusFilter = filter;
-      this.temp = this.filterRows(this.previousRoleFilter, this.previousPlanFilter, filter);
+      this.temp = this.filterRows(this.previousRoleFilter,filter);
       this.rows = this.temp;
     }
 
     // Filter Rows
-    filterRows(roleFilter, planFilter, statusFilter): any[] {
+    filterRows(roleFilter, statusFilter): any[] {
       // Reset search on select change
       this.searchValue = '';
 
       roleFilter = roleFilter.toLowerCase();
-      planFilter = planFilter.toLowerCase();
       statusFilter = statusFilter.toLowerCase();
 
       return this.tempData.filter(row => {
-        const isPartialNameMatch = row.role.toLowerCase().indexOf(roleFilter) !== -1 || !roleFilter;
-        const isPartialGenderMatch = row.currentPlan.toLowerCase().indexOf(planFilter) !== -1 || !planFilter;
+        const isPartialNameMatch = row.roleName.toLowerCase().indexOf(roleFilter) !== -1 || !roleFilter;
         const isPartialStatusMatch = row.status.toLowerCase().indexOf(statusFilter) !== -1 || !statusFilter;
-        return isPartialNameMatch && isPartialGenderMatch && isPartialStatusMatch;
+        return isPartialNameMatch && isPartialStatusMatch;
       });
     }
 
     // get all user
     getUsers() {
         this.userService.getUsers().subscribe((response: any) => {
-          console.log(response);
-          this.rows = response.data;
-          this.tempData = this.rows;
+              this.rows = response.data;
+              this.tempData = this.rows;
         });
     }
 

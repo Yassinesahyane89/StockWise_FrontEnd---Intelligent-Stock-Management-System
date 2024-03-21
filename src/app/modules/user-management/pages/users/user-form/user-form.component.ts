@@ -9,15 +9,15 @@ import { ToastrService } from 'ngx-toastr';
       selector: 'app-user-form',
       templateUrl: './user-form.component.html',
       styleUrls: ['./user-form.component.scss'],
-    encapsulation: ViewEncapsulation.None
+        encapsulation: ViewEncapsulation.None
 })
 export class UserFormComponent  implements OnInit {
-    userReq: UserReq = {} as UserReq;
-    pageType: string;
-    pageTitle: string;
-    userID: number;
 
     // public
+    public userReq: UserReq = {} as UserReq;
+    public pageType: string;
+    public pageTitle: string;
+    public userID: number;
     public contentHeader: object;
 
     constructor(
@@ -112,6 +112,17 @@ export class UserFormComponent  implements OnInit {
             this.pageTitle = 'Edit User';
         }
     }
+
+    // user form submitted
+    userFomrSubmitted(UserForm: any) {
+        if(this.pageType === 'new') {
+            this.addUser(UserForm);
+        }else {
+            this.updateUser(UserForm);
+        }
+    }
+
+    // Lifecycle Hooks
     ngOnInit() {
         // check page type
         this.checkPageType();
@@ -149,13 +160,5 @@ export class UserFormComponent  implements OnInit {
             ]
           }
         };
-    }
-
-    userFomrSubmitted(UserForm: any) {
-        if(this.pageType === 'new') {
-            this.addUser(UserForm);
-        }else {
-            this.updateUser(UserForm);
-        }
     }
 }

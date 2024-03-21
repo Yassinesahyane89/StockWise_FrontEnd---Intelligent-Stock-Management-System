@@ -11,7 +11,7 @@
                     <div class="users-list-filter">
                         <form>
                             <div class="row">
-                                <div class="col-12 col-md-4">
+                                <div class="col-12 col-md-6">
                                     <fieldset class="form-group">
                                         <ng-select
                                                 [items]="selectRole"
@@ -23,19 +23,7 @@
                                         ></ng-select>
                                     </fieldset>
                                 </div>
-                                <div class="col-12 col-md-4">
-                                    <fieldset class="form-group">
-                                        <ng-select
-                                                [items]="selectPlan"
-                                                [(ngModel)]="selectedPlan"
-                                                name="selectedPlan"
-                                                bindLabel="name"
-                                                placeholder="Select Plan"
-                                                (change)="filterByPlan($event)"
-                                        ></ng-select>
-                                    </fieldset>
-                                </div>
-                                <div class="col-12 col-md-4">
+                                <div class="col-12 col-md-6">
                                     <fieldset class="form-group">
                                         <ng-select
                                                 [items]="selectStatus"
@@ -53,7 +41,6 @@
                 </div>
             </div>
             <!-- users filter end -->
-
             <div class="card">
                 <div class="row">
                     <div class="col-md-6 col-12">
@@ -81,8 +68,8 @@
                             </label>
                             <button class="btn btn-primary ml-1">
                                 <a routerLink="/user-management/users/new-user" class="text-white">
-                                <i data-feather="plus" class="d-sm-none d-inline-block mr-0 mr-sm-1"></i
-                                ><span class="d-none d-sm-inline-block">Add New User</span>
+                                    <i data-feather="plus" class="d-sm-none d-inline-block mr-0 mr-sm-1"></i>
+                                    <span class="d-none d-sm-inline-block">Add New User</span>
                                 </a>
                             </button>
                         </div>
@@ -127,6 +114,23 @@
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Email" prop="email" [width]="200"></ngx-datatable-column>
+                    <ngx-datatable-column name="Role" prop="roleName" [width]="100">
+                        <ng-template let-role="value" ngx-datatable-cell-template>
+                            <div>
+                                <i
+                                        class="feather font-medium-3"
+                                        [ngClass]="{
+                                            'icon-edit-2 text-info': role == 'Editor',
+                                            'icon-settings text-warning': role == 'MANAGER',
+                                            'icon-database text-success': role == 'Maintainer',
+                                            'icon-user text-primary': role == 'USER',
+                                            'icon-slack text-danger': role == 'ADMIN'
+                                          }"
+                                ></i>
+                                {{ role }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
                     <ngx-datatable-column name="Status" prop="status" [width]="50">
                         <ng-template let-status="value" ngx-datatable-cell-template>
                             <div
