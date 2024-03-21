@@ -20,7 +20,6 @@ import { LayoutModule } from 'app/layout/layout.module';
 import { ContentHeaderModule } from 'app/layout/components/content-header/content-header.module';
 import { SampleModule } from 'app/main/sample/sample.module';
 import { CustomToastrComponent } from './shared/components/custom-toastr/custom-toastr.component';
-
 const appRoutes: Routes = [
   {
     path: 'pages',
@@ -29,6 +28,10 @@ const appRoutes: Routes = [
   {
     path: 'user-management',
     loadChildren: () => import('./modules/user-management/user-management-routing.module').then(m => m.UserManagementRoutingModule)
+  },
+  {
+    path: 'inventory',
+    loadChildren: () => import('./modules/inventory/inventory-routing.module').then(m => m.InventoryRoutingModule)
   },
   {
     path: '',
