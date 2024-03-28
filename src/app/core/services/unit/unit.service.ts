@@ -48,6 +48,15 @@ export class UnitService {
         );
     }
 
+    // filter unit by status
+    filterByStatus(status: string) {
+        return this.http.get(`${this.apUrl}/unit/filter-by-status/${status}`).pipe(
+            catchError((error) => {
+              return throwError(error);
+            })
+        );
+    }
+
     // delete unit
     deleteUnit(id: number) {
         return this.http.delete(`${this.apUrl}/unit/delete-unit/${id}`).pipe(

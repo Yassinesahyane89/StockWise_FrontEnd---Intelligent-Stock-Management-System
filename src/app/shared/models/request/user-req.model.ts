@@ -4,4 +4,5 @@ export interface UserReq {
     lastName: string;
     email: string;
     status: string;
+    roleId: number;
 }

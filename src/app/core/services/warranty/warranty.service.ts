@@ -49,6 +49,15 @@ export class WarrantyService {
         );
     }
 
+    // filter by status
+    filterByStatus(status: string) {
+        return this.http.get(`${this.apUrl}/warranty/filter-by-status/${status}`).pipe(
+            catchError((error) => {
+              return throwError(error);
+            })
+        );
+    }
+
     // delete warranty
     deleteWarranty(id: number) {
         return this.http.delete(`${this.apUrl}/warranty/delete-warranty/${id}`).pipe(

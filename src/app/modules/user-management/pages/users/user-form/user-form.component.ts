@@ -5,6 +5,7 @@ import {UsersService} from "../../../../../core/services/users/users.service";
 import {UserReq} from "../../../../../shared/models/request/user-req.model";
 
 import { ToastrService } from 'ngx-toastr';
+import {RolesService} from "../../../../../core/services/roles/roles.service";
 @Component({
       selector: 'app-user-form',
       templateUrl: './user-form.component.html',
@@ -19,12 +20,17 @@ export class UserFormComponent  implements OnInit {
     public pageTitle: string;
     public userID: number;
     public contentHeader: object;
+    public roles: any;
+    public selectedRole: any;
+    public roleId: number;
 
     constructor(
         private toastr: ToastrService,
         private route: ActivatedRoute,
         private router: Router,
-        private usersService: UsersService) {}
+        private usersService: UsersService,
+        private roleService: RolesService
+        ) {}
 
     // handle success case
     handleSuccess(response,form) {
@@ -66,6 +72,8 @@ export class UserFormComponent  implements OnInit {
 
     // add user
     addUser(UserForm: any) {
+        console.log(this.userReq);
+        this.userReq.roleId = this.selectedRole.id;
         this.usersService.createUser(this.userReq)
             .subscribe(
                 (response: any) => {
@@ -78,6 +86,7 @@ export class UserFormComponent  implements OnInit {
 
     // update user
     updateUser(UserForm: any) {
+        this.userReq.roleId = this.selectedRole.id;
         this.usersService.updateUser(this.userID, this.userReq)
             .subscribe(
                 (response: any) => {
@@ -94,9 +103,48 @@ export class UserFormComponent  implements OnInit {
             .subscribe(
                 (response: any) => {
                         this.userReq = response.data;
+                        this.roleId = response.data.roleId;
+                        // get role by id
+                        this.getRoleById(response.data.roleId);
                     }, (error) => {
                         this.router.navigate(['/user-management/users/list']);
                     }
+
+
+            );
+    }
+
+    // get All roles
+    getAllRoles() {
+        this.roleService.getAllRoles()
+            .subscribe(
+                (response: any) => {
+                    this.roles = response.data.map((role) => {
+                        return {
+                            id: role.id,
+                            name: role.roleName,
+                            value: role.id
+                        };
+                    });
+                }, (error) => {
+                    this.roles = [];
+                }
+            );
+    }
+
+    // get role by id
+    getRoleById(id:number) {
+        this.roleService.getRoleById(id)
+            .subscribe(
+                (response: any) => {
+                    this.selectedRole = {
+                        id: response.data.id,
+                        name: response.data.roleName,
+                        value: response.data.id
+                    };
+                }, (error) => {
+                    this.selectedRole = {};
+                }
             );
     }
 
@@ -124,17 +172,11 @@ export class UserFormComponent  implements OnInit {
 
     // Lifecycle Hooks
     ngOnInit() {
+        // get all roles
+        this.getAllRoles();
+
         // check page type
         this.checkPageType();
-
-        // fake data
-        this.userReq = {
-            id: 1,
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'john@gmail.com',
-            status: 'ACTIVE',
-        }
 
         // content header
         this.contentHeader = {
@@ -146,7 +188,7 @@ export class UserFormComponent  implements OnInit {
               {
                 name: 'Home',
                 isLink: true,
-                link: '/'
+                link: '/home'
               },
               {
                 name: 'users',

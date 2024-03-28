@@ -25,7 +25,7 @@
                                                     required
                                                     id="SubCategoryName"
                                                     name="subCategoryName"
-                                                    [(ngModel)]="subCategoryReq.subCategoryName"
+                                                    [(ngModel)]="subCategoryRes.categoryName"
                                                     type="text"
                                                     placeholder="Your Name"
                                             />
@@ -45,7 +45,7 @@
                                                     required
                                                     id="SubSubCategoryDescription"
                                                     name="categoryDescription"
-                                                    [(ngModel)]="subCategoryReq.description"
+                                                    [(ngModel)]="subCategoryRes.description"
                                                     type="text"
                                                     placeholder="Your Description"
                                             />
@@ -54,7 +54,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-sm-6">
                                         <fieldset class="form-group">
                                             <ng-select
                                                     [items]="categories"

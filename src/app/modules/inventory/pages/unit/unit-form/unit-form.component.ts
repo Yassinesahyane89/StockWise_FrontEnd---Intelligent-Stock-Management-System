@@ -136,7 +136,7 @@ export class UnitFormComponent implements OnInit {
                 {
                 name: 'Home',
                 isLink: true,
-                link: '/'
+                link: '/home'
                 },
                 {
                 name: 'Unit',

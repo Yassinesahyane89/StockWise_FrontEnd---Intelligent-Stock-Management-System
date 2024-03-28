@@ -1,0 +1,132 @@
+<div class="auth-wrapper auth-v2">
+    <div class="auth-inner row m-0">
+        <!-- Brand logo-->
+        <a class="brand-logo" href="javascript:void(0);">
+            <img src="assets/images/logo/logo.png" alt="brand-logo" height="28" />
+            <h2 class="brand-text text-primary ml-1">StockWise</h2>
+        </a>
+        <!-- /Brand logo-->
+        <!-- Left Text-->
+        <div class="d-none d-lg-flex col-lg-8 align-items-center p-5">
+            <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+                <img
+                        class="img-fluid"
+                        src="assets/images/pages/register-v2.svg"
+                        alt="Register V2"
+                />
+            </div>
+        </div>
+        <!-- /Left Text-->
+        <!-- Register-->
+        <div class="d-flex col-lg-4 align-items-center auth-bg px-2 p-lg-5">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
+                <h2 class="card-title font-weight-bold mb-1">Welcome to StockWise! 👋</h2>
+                <p class="card-text mb-2">Please sign-in to your account and start the adventure</p>
+                            <form class="auth-register-form mt-2" (ngSubmit)="(UserForm.form.valid)" #UserForm="ngForm">
+                                <div class="form-group">
+                                    <label class="form-control-label" for="FirstName">First Name</label>
+                                    <input
+                                            class="form-control input-md"
+                                            [class.error]="!FirstNameRef.valid && FirstNameRef.touched"
+                                            ngModel
+                                            #FirstNameRef="ngModel"
+                                            required
+                                            id="FirstName"
+                                            name="firstName"
+                                            [(ngModel)]="registerReq.firstName"
+                                            type="text"
+                                            placeholder="Your Name"
+                                    />
+                                    <span *ngIf="!FirstNameRef.valid && FirstNameRef.touched" class="invalid-form">
+                                            <small class="form-text text-danger" *ngIf="FirstNameRef.errors.required">This field is required!</small>
+                                        </span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label" for="lastName">Last Name</label>
+                                    <input
+                                            class="form-control input-md"
+                                            [class.error]="!lastNameRef.valid && lastNameRef.touched"
+                                            ngModel
+                                            #lastNameRef="ngModel"
+                                            required
+                                            id="lastName"
+                                            name="familyName"
+                                            [(ngModel)]="registerReq.lastName"
+                                            type="text"
+                                            placeholder="Your Name"
+                                    />
+                                    <span *ngIf="!lastNameRef.valid && lastNameRef.touched" class="invalid-form">
+                                        <small class="form-text text-danger" *ngIf="lastNameRef.errors.required">This field is required!</small>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label" for="email">Email</label>
+                                    <input
+                                            class="form-control input-md"
+                                            [class.error]="!EmailRef.valid && EmailRef.touched"
+                                            ngModel
+                                            #EmailRef="ngModel"
+                                            required
+                                            email
+                                            id="email"
+                                            name="email"
+                                            [(ngModel)]="registerReq.email"
+                                            type="text"
+                                            placeholder="Your Email"
+                                    />
+                                    <span *ngIf="!EmailRef.valid && EmailRef.touched" class="invalid-form">
+                                            <small class="form-text text-danger">email must be valid!</small>
+                                        </span>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group input-group-merge form-password-toggle">
+                                        <input
+                                                [type]="passwordTextType ? 'text' : 'password'"
+                                                class="form-control input-md"
+                                                [class.error]="!PasswordRef.valid && PasswordRef.touched"
+                                                ngModel
+                                                #PasswordRef="ngModel"
+                                                required
+                                                id="login-password"
+                                                name="password"
+                                                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+                                                [(ngModel)]="registerReq.password"
+                                                placeholder="············"
+                                                tabindex="2"
+                                        />
+                                        <div class="input-group-append">
+                                            <span class="input-group-text cursor-pointer">
+                                                <i
+                                                        class="feather font-small-4"
+                                                        [ngClass]="{'icon-eye-off': passwordTextType,'icon-eye': !passwordTextType}"
+                                                        (click)="togglePasswordTextType()">
+                                                </i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span *ngIf="!PasswordRef.valid && PasswordRef.touched" class="invalid-form">
+                                        <small class="form-text text-danger" *ngIf="PasswordRef.errors.required">This field is required!</small>
+                                        <small class="form-text text-danger" *ngIf="PasswordRef.errors.pattern">Password must contain at least one uppercase letter, one lowercase letter, one number and at least 8 characters!</small>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="register-privacy-policy" tabindex="4" />
+                                        <label class="custom-control-label" for="register-privacy-policy">
+                                            I agree to <a href="javascript:void(0);">privacy policy & terms</a>
+                                        </label>
+                                    </div>
+                                </div>
+                                <button type="submit" [disabled]="!UserForm.form.valid" (click)="registerFomrSubmitted(UserForm)" class="btn btn-primary btn-block" rippleEffect>
+                                    Sign up
+                                </button>
+                            </form>
+                <p class="text-center mt-2">
+                    <span>Already have an account?</span>
+                    <a routerLink="/user-management/auth/login"><span>&nbsp;Sign in instead</span></a>
+                </p>
+            </div>
+        </div>
+        <!-- /Register-->
+    </div>
+</div>

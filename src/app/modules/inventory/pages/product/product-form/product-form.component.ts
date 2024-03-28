@@ -8,6 +8,7 @@ import {ProductService} from "app/core/services/product/product.service";
 import {CategoryService} from "../../../../../core/services/category/category.service";
 import {BrandService} from "../../../../../core/services/brand/brand.service";
 import {SubCategoryService} from "../../../../../core/services/sub-category/sub-category.service";
+import {UnitService} from "../../../../../core/services/unit/unit.service";
 
 @Component({
   selector: 'app-product-form',
@@ -28,6 +29,8 @@ export class ProductFormComponent implements OnInit {
     public selectedSubCategory: any;
     public brands: any;
     public selectedBrand: any;
+    public units: any;
+    public selectedUnit: any;
     constructor(
         private toastr: ToastrService,
         private route: ActivatedRoute,
@@ -35,7 +38,8 @@ export class ProductFormComponent implements OnInit {
         private productService: ProductService,
         private categoryService: CategoryService,
         private subCategoryService: SubCategoryService,
-        private brandService: BrandService
+        private brandService: BrandService,
+        private unitService: UnitService
     ) { }
 
     // handle success case
@@ -99,17 +103,20 @@ export class ProductFormComponent implements OnInit {
     getProductByID() {
       this.productService.getProductById(this.productID).subscribe((response: any) => {
         this.productReq.name = response.data.name;
-        this.productReq.price = response.data.price;
+        // the price are in string format like this "$ 100.00" so we need to remove the "$" and convert it to number
+        this.productReq.price = response.data.price.replace('$ ', '');
         this.productReq.quantity = response.data.quantity;
         this.productReq.description = response.data.description;
-        this.productReq.status = response.data.status;
         this.productReq.categoryId = response.data.categoryId;
         this.productReq.subCategoryId = response.data.subCategoryId;
         this.productReq.brandId = response.data.brandId;
+        this.productReq.unitId = response.data.unitId;
+        this.productReq.status = response.data.status;
 
         this.getCategoryByID();
         this.getSubCategoryByID();
         this.getBrandByID();
+        this.getUnitByID();
       });
     }
 
@@ -159,12 +166,27 @@ export class ProductFormComponent implements OnInit {
         });
     }
 
+    // get all units
+    getAllUnits() {
+        this.unitService.getAllUnits().subscribe((response: any) => {
+            this.units = response.data.map((item) => {
+                return {
+                    id: item.id,
+                    name: item.unitName,
+                    value: item.id
+                };
+            });
+        }, (error) => {
+            this.handleError(error, null);
+        });
+    }
+
     // get brand by id
     getBrandByID() {
         this.brandService.getBrandById(this.productReq.brandId).subscribe((response: any) => {
             this.selectedBrand = {
                 id: response.data.id,
-                name: response.data.brandName,
+                name: response.data.brand,
                 value: response.data.id
             };
         }, (error) => {
@@ -177,7 +199,7 @@ export class ProductFormComponent implements OnInit {
         this.subCategoryService.getSubCategoryById(this.productReq.subCategoryId).subscribe((response: any) => {
             this.selectedSubCategory = {
                 id: response.data.id,
-                name: response.data.subCategoryName,
+                name: response.data.categoryName,
                 value: response.data.id
             };
         }, (error) => {
@@ -191,6 +213,19 @@ export class ProductFormComponent implements OnInit {
             this.selectedCategory = {
                 id: response.data.id,
                 name: response.data.categoryName,
+                value: response.data.id
+            };
+        }, (error) => {
+            this.handleError(error, null);
+        });
+    }
+
+    // get unit by id
+    getUnitByID() {
+        this.unitService.getUnitById(this.productReq.unitId).subscribe((response: any) => {
+            this.selectedUnit = {
+                id: response.data.id,
+                name: response.data.unitName,
                 value: response.data.id
             };
         }, (error) => {
@@ -215,6 +250,7 @@ export class ProductFormComponent implements OnInit {
     productFomrSubmitted(form) {
         this.productReq.subCategoryId = this.selectedSubCategory.id;
         this.productReq.brandId = this.selectedBrand.id;
+        this.productReq.unitId = this.selectedUnit.id;
         if (this.pageType === 'new') {
             this.createProduct(form);
         }else {
@@ -232,6 +268,9 @@ export class ProductFormComponent implements OnInit {
         // get all brands
         this.getAllBrands();
 
+        // get all units
+        this.getAllUnits();
+
         // content header
         this.contentHeader = {
             headerTitle: this.pageTitle,
@@ -242,7 +281,7 @@ export class ProductFormComponent implements OnInit {
                     {
                         name: 'Home',
                         isLink: true,
-                        link: '/'
+                        link: '/home'
                     },
                     {
                         name: 'Product',

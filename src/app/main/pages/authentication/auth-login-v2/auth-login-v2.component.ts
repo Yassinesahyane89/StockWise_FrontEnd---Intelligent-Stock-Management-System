@@ -81,7 +81,7 @@ export class AuthLoginV2Component implements OnInit {
 
     // redirect to home page
     setTimeout(() => {
-      this._router.navigate(['/']);
+      this._router.navigate(['/home']);
     }, 100);
   }
 
@@ -98,7 +98,7 @@ export class AuthLoginV2Component implements OnInit {
     });
 
     // get return url from route parameters or default to '/'
-    this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/home';
 
     // Subscribe to config changes
     this._coreConfigService.config.pipe(takeUntil(this._unsubscribeAll)).subscribe(config => {

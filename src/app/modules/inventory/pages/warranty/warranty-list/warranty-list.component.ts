@@ -70,20 +70,13 @@ export class WarrantyListComponent implements OnInit {
 
       // Filter Our Data
       const temp = this.tempData.filter(function (d) {
-        return d.fullName.toLowerCase().indexOf(val) !== -1 || !val;
+        return d.name.toLowerCase().indexOf(val) !== -1 || !val;
       });
 
       // Update The Rows
       this.rows = temp;
       // Whenever The Filter Changes, Always Go Back To The First Page
       this.table.offset = 0;
-    }
-
-    filterByStatus(event: any) {
-        const filter = event ? event.value : '';
-        this.previousStatusFilter = filter;
-        this.temp = this.filterRows(filter);
-        this.rows = this.temp;
     }
 
   // Filter Rows
@@ -107,6 +100,19 @@ export class WarrantyListComponent implements OnInit {
         this.handleError(error);
       });
     }
+
+  filterByStatus(event: any) {
+    if(event.value === null || event.value === '' || event.value === undefined) {
+        return this.getAllWarranty();
+    }else {
+        this.warrantyService.filterByStatus(event.value).subscribe((response: any) => {
+          this.rows = response.data;
+          this.tempData = this.rows;
+        }, error => {
+          this.handleError(error);
+        });
+    }
+  }
 
     // delete warranty
     deleteWarranty(id) {

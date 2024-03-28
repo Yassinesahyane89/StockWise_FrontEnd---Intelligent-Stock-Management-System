@@ -78,7 +78,14 @@
                     <ngx-datatable-column name="Brand" prop="brand" [width]="200"></ngx-datatable-column>
                     <ngx-datatable-column name="Email" prop="email" [width]="200"></ngx-datatable-column>
                     <ngx-datatable-column name="Website" prop="website" [width]="200"></ngx-datatable-column>
-                    <ngx-datatable-column name="Created On" prop="createdOn" [width]="200"></ngx-datatable-column>
+                    <ngx-datatable-column name="Created On" prop="createdOn" [width]="200">
+                        <ng-template let-createdOn="value" ngx-datatable-cell-template>
+                            <div class="badge badge-info">
+                                <i data-feather="calendar" class="mr-25"></i>
+                                <span>{{createdOn}}</span>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
                     <ngx-datatable-column name="Status" prop="status" [width]="50">
                         <ng-template let-status="value" ngx-datatable-cell-template>
                             <div

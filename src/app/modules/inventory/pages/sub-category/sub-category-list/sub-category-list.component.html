@@ -3,41 +3,29 @@
         <!-- Sub-Category List -->
         <section class="sub-categories-list-wrapper">
             <!-- sub-categories filter start -->
-            <div class="card">
-                <h5 class="card-header">Search Filter</h5>
-                <div class="card-body">
-                    <div class="sub-categories-list-filter">
-                        <form>
-                            <div class="row">
-                                <div class="col-12">
-                                    <fieldset class="form-group">
-                                        <ng-select
-                                                [items]="selectStatus"
-                                                [(ngModel)]="selectedStatus"
-                                                name="selectedStatus"
-                                                bindLabel="name"
-                                                placeholder="Select Status"
-                                                (change)="filterByStatus($event)"
-                                        ></ng-select>
-                                    </fieldset>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <fieldset class="form-group">
-                                        <ng-select
-                                                [items]="selectCategory"
-                                                [(ngModel)]="selectedCategory"
-                                                name="selectedCategory"
-                                                bindLabel="name"
-                                                placeholder="Select Category"
-                                                (change)="filterByCategory($event)"
-                                        ></ng-select>
-                                    </fieldset>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+<!--            <div class="card">-->
+<!--                <h5 class="card-header">Search Filter</h5>-->
+<!--                <div class="card-body">-->
+<!--                    <div class="sub-categories-list-filter">-->
+<!--                        <form>-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-12 col-md-12">-->
+<!--                                    <fieldset class="form-group">-->
+<!--                                        <ng-select-->
+<!--                                                [items]="selectCategory"-->
+<!--                                                [(ngModel)]="selectedCategory"-->
+<!--                                                name="selectedCategory"-->
+<!--                                                bindLabel="name"-->
+<!--                                                placeholder="Select Category"-->
+<!--                                                (change)="filterByCategory($event)"-->
+<!--                                        ></ng-select>-->
+<!--                                    </fieldset>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
             <!-- sub-category filter end -->
 
             <div class="card">
@@ -89,21 +77,35 @@
                 >
                     <ngx-datatable-column name="Category" prop="categoryName" [width]="200"></ngx-datatable-column>
                     <ngx-datatable-column name="Parent Category" prop="parentCategory" [width]="200"></ngx-datatable-column>
-                    <ngx-datatable-column name="Category Code" prop="categoryCode" [width]="200"></ngx-datatable-column>
+                    <ngx-datatable-column name="Category Code" prop="categoryCode" [width]="200">
+                        <ng-template let-categoryCode="value" ngx-datatable-cell-template>
+                            <div class="badge badge-warning">
+                                <i data-feather="key" class="mr-25"></i>
+                                <span>{{categoryCode}}</span>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
                     <ngx-datatable-column name="Description" [width]="200">
                         <ng-template let-row="row" ngx-datatable-cell-template>
                             <span *ngIf="row.description.length > 20">{{ row.description | slice:0:20 }}...</span>
                             <span *ngIf="row.description.length <= 20">{{ row.description }}</span>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Date Created" prop="createdOn" [width]="200"></ngx-datatable-column>
+                    <ngx-datatable-column name="Created On" prop="createdOn" [width]="200">
+                        <ng-template let-createdOn="value" ngx-datatable-cell-template>
+                            <div class="badge badge-info">
+                                <i data-feather="calendar" class="mr-25"></i>
+                                <span>{{createdOn}}</span>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
                     <ngx-datatable-column name="Actions" [width]="40" [sortable]="false">
                         <ng-template ngx-datatable-cell-template let-row="row">
                             <div ngbDropdown container="body">
                                 <button ngbDropdownToggle type="button" class="btn icon-btn btn-sm hide-arrow" rippleEffect>
                                     <span [data-feather]="'more-vertical'" [class]="'cursor-pointer'"></span>
                                 </button>
-                                <<div ngbDropdownMenu>
+                                <div ngbDropdownMenu>
                                     <a routerLink="/inventory/sub-category/edit-sub-category/{{ row.id }}" ngbDropdownItem>
                                         <span [data-feather]="'edit'" [size]="16" [class]="'mr-50'"></span>
                                         Edit

@@ -30,6 +30,15 @@ export class CategoryService {
         );
     }
 
+    // get category by name
+    getCategoryByName(name: string) {
+        return this.http.get(`${this.apUrl}/category/name/${name}`).pipe(
+            catchError((error) => {
+              return throwError(error);
+            })
+        );
+    }
+
     // create category
     createCategory(category: any) {
         return this.http.post(`${this.apUrl}/category/new-category`, category).pipe(

@@ -5,6 +5,6 @@ export interface ProductRequest {
     quantity: number;
     subCategoryId: number;
     brandId: number;
+    unitId: number;
     status: String;
-
 }

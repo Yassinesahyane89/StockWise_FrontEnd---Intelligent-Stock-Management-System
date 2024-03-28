@@ -75,6 +75,19 @@
                                                 </span>
                                             </div>
                                         </div>
+                                        <div class="col-sm-6">
+                                            <fieldset class="form-group">
+                                                <label class="form-control-label">Role</label>
+                                                <ng-select
+                                                        [items]="roles"
+                                                        [(ngModel)]="selectedRole"
+                                                        name="selectedRole"
+                                                        bindLabel="name"
+                                                        placeholder="Select role"
+                                                        required
+                                                ></ng-select>
+                                            </fieldset>
+                                        </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="form-control-label" for="status">Status</label>

@@ -7,6 +7,7 @@ import {ToastrService} from "ngx-toastr";
 import {SubCategoryService} from "app/core/services/sub-category/sub-category.service";
 import {CategoryService} from "app/core/services/category/category.service";
 import {CategoryRequest} from "../../../../../shared/models/request/category-request.model";
+import {SubCategoryResponse} from "../../../../../shared/models/response/sub-category-response.model";
 
 @Component({
       selector: 'app-sub-category-form',
@@ -16,6 +17,7 @@ import {CategoryRequest} from "../../../../../shared/models/request/category-req
 })
 export class SubCategoryFormComponent implements OnInit {
     //public
+    public subCategoryRes: any = {} as SubCategoryResponse;
     public subCategoryReq: any = {} as SubCategoryRequest;
     public pageType: string;
     public pageTitle: string;
@@ -46,7 +48,7 @@ export class SubCategoryFormComponent implements OnInit {
 
         //form.reset();
         form.reset();
-        this.subCategoryReq = {} as SubCategoryRequest;
+        this.subCategoryRes = {} as SubCategoryRequest;
     }
 
     // handle error case
@@ -72,6 +74,9 @@ export class SubCategoryFormComponent implements OnInit {
 
     // create sub-category
     createSubCategory(form) {
+        this.subCategoryReq.subCategoryName = this.subCategoryRes.categoryName;
+        this.subCategoryReq.parentCategoryId = this.selectedCategory.id;
+        this.subCategoryReq.description = this.subCategoryRes.description;
         this.subCategoryService.createSubCategory(this.subCategoryReq).subscribe((response: any) => {
             this.handleSuccess(response,form);
         }, (error) => {
@@ -81,6 +86,9 @@ export class SubCategoryFormComponent implements OnInit {
 
     // update sub-category
     updateSubCategory(form) {
+        this.subCategoryReq.subCategoryName = this.subCategoryRes.categoryName;
+        this.subCategoryReq.parentCategoryId = this.selectedCategory.id;
+        this.subCategoryReq.description = this.subCategoryRes.description;
         this.subCategoryService.updateSubCategory(this.subCategoryID, this.subCategoryReq).subscribe((response: any) => {
             this.handleSuccess(response,form);
         }, (error) => {
@@ -91,7 +99,8 @@ export class SubCategoryFormComponent implements OnInit {
     // get sub-category by id
     getSubCategoryById() {
         this.subCategoryService.getSubCategoryById(this.subCategoryID).subscribe((response: any) => {
-            this.subCategoryReq = response.data;
+            this.subCategoryRes = response.data;
+            this.getCategoryByName(this.subCategoryRes.parentCategory);
         }, (error) => {
             this.handleError(error,null);
         });
@@ -108,6 +117,19 @@ export class SubCategoryFormComponent implements OnInit {
                     value: item.id
                 };
             });
+        }, (error) => {
+            this.handleError(error,null);
+        });
+    }
+
+    // get category by name
+    getCategoryByName(name: string) {
+        this.categoryService.getCategoryByName(name).subscribe((response: any) => {
+            this.selectedCategory = {
+                id: response.data.id,
+                name: response.data.categoryName,
+                value: response.data.id
+            }
         }, (error) => {
             this.handleError(error,null);
         });
@@ -153,7 +175,7 @@ export class SubCategoryFormComponent implements OnInit {
                     {
                         name: 'Home',
                         isLink: true,
-                        link: '/'
+                        link: '/home'
                     },
                     {
                         name: 'Sub Category',

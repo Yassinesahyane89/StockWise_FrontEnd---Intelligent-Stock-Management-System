@@ -69,7 +69,7 @@ export class UnitListComponent implements OnInit {
 
         // Filter Our Data
         const temp = this.tempData.filter(function (d) {
-            return d.fullName.toLowerCase().indexOf(val) !== -1 || !val;
+            return d.unitName.toLowerCase().indexOf(val) !== -1 || !val;
         });
 
         // Update The Rows
@@ -81,22 +81,16 @@ export class UnitListComponent implements OnInit {
     // Filter By Status
     filterByStatus(event) {
         console.log(event);
-        const filter = event ? event.value : '';
-        this.previousStatusFilter = filter;
-        this.temp = this.filterRows(filter);
-        this.rows = this.temp;
-    }
-
-    // Filter Rows
-    filterRows(statusFilter): any[] {
-        // Reset search on select change
-        this.searchValue = '';
-
-        statusFilter = statusFilter.toLowerCase();
-
-        return this.tempData.filter(row => {
-            return row.status.toLowerCase().indexOf(statusFilter) !== -1 || !statusFilter;
-        });
+        if(event.value === null || event.value === '' || event.value === undefined) {
+            return this.getAllUnits();
+        }else {
+            this.unitService.filterByStatus(event.value).subscribe((response: any) => {
+                this.rows = response.data;
+                this.tempData = this.rows;
+            }, error => {
+                this.handleError(error);
+            });
+        }
     }
 
     // get all units

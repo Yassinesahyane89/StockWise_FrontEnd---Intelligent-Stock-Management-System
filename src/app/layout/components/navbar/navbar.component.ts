@@ -15,6 +15,9 @@ import { User } from 'app/auth/models';
 
 import { coreConfig } from 'app/app-config';
 import { Router } from '@angular/router';
+import {AuthService} from "../../../core/services/auth/auth.service";
+import {AuthResponse} from "../../../shared/models/response/auth-response.model";
+import {BrandRequest} from "../../../shared/models/request/brand-request.model";
 
 @Component({
   selector: 'app-navbar',
@@ -41,6 +44,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   @HostBinding('class.navbar-static-style-on-scroll')
   public windowScrolled = false;
+
+  // user
+  public userResponse: any = {} as AuthResponse;
 
   // Add .navbar-static-style-on-scroll on scroll using HostListener & HostBinding
   @HostListener('window:scroll', [])
@@ -81,7 +87,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private _coreMediaService: CoreMediaService,
     private _coreSidebarService: CoreSidebarService,
     private _mediaObserver: MediaObserver,
-    public _translateService: TranslateService
+    public _translateService: TranslateService,
+    public _authService: AuthService
   ) {
     this._authenticationService.currentUser.subscribe(x => (this.currentUser = x));
 
@@ -165,9 +172,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
    * Logout method
    */
   logout() {
-    this._authenticationService.logout();
-    this._router.navigate(['/pages/authentication/login-v2']);
+    this.userResponse=this._authService.logout();
+    console.log(this.userResponse);
   }
+
+  // get user
+    get getUser() {
+      return this._authService.getUser();
+    }
 
   // Lifecycle Hooks
   // -----------------------------------------------------------------------------------------------------
@@ -176,6 +188,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
    * On init
    */
   ngOnInit(): void {
+    // Set the userResponse from localStorage
+    this.userResponse = this.getUser;
     // get the currentUser details from localStorage
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 

@@ -134,6 +134,19 @@
                                             ></ng-select>
                                         </fieldset>
                                     </div>
+                                    <div class="col-sm-6">
+                                        <fieldset class="form-group">
+                                            <label class="form-control-label">Unit</label>
+                                            <ng-select
+                                                    [items]="units"
+                                                    [(ngModel)]="selectedUnit"
+                                                    name="selectedUnit"
+                                                    bindLabel="name"
+                                                    placeholder="Select unit"
+                                                    required
+                                            ></ng-select>
+                                        </fieldset>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="form-control-label" for="status">Status</label>
@@ -147,8 +160,8 @@
                                                     required
                                                     #statusRef="ngModel"
                                             >
-                                                <option value="Active">Active</option>
-                                                <option value="Inactive">Inactive</option>
+                                                <option value="ACTIVE">Active</option>
+                                                <option value="INACTIVE">Inactive</option>
                                             </select>
                                             <div *ngIf="!statusRef.valid && statusRef.touched" class="invalid-feedback">
                                                 <small class="form-text text-danger">status is required!</small>

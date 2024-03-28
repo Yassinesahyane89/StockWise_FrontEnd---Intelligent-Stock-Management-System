@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { ColumnMode, DatatableComponent } from '@swimlane/ngx-datatable';
 
 import { ToastrService } from 'ngx-toastr';
@@ -28,14 +28,22 @@ export class BrandListComponent implements OnInit {
     ];
 
     public selectStatus: any = [
-      { id: 1, name: 'Active' , value: 'active'},
-      { id: 2, name: 'Inactive' , value: 'inactive'}
+      { id: 0, name: 'All' , value: ''},
+      { id: 1, name: 'Active' , value: 'ACTIVE'},
+      { id: 2, name: 'Inactive' , value: 'INACTIVE'}
     ];
 
     // selected values
     public selectedDateCreated = [];
     public selectedStatus = [];
     public searchValue = '';
+
+    // Decorator
+    @ViewChild(DatatableComponent) table: DatatableComponent;
+
+    // Private
+    private tempData = [];
+
     constructor(
       private toastr: ToastrService,
       private brandService: BrandService
@@ -62,15 +70,33 @@ export class BrandListComponent implements OnInit {
       });
     }
 
-    filterByDateCreated($event: any) {
-
+    filterByStatus(event: any) {
+        if(event.value === null || event.value === '' || event.value === undefined) {
+            return this.getBrands();
+        }else {
+            this.brandService.filterByStatus(event.value).subscribe((response: any) => {
+                this.rows = response.data;
+            }, error => {
+                this.handleError(error);
+            });
+        }
     }
 
-    filterByStatus($event: any) {
+    filterUpdate(event) {
+        // Reset ng-select on search
+        this.selectedStatus = this.selectStatus[0];
 
-    }
+        const val = event.target.value.toLowerCase();
 
-    filterUpdate($event: KeyboardEvent) {
+        // Filter Our Data
+        const temp = this.tempData.filter(function (d) {
+            return d.brand.toLowerCase().indexOf(val) !== -1 || !val;
+        });
+
+        // Update The Rows
+        this.rows = temp;
+        // Whenever The Filter Changes, Always Go Back To The First Page
+        this.table.offset = 0;
     }
 
     // get all brands
@@ -78,6 +104,7 @@ export class BrandListComponent implements OnInit {
         this.brandService.getBrands().subscribe(
         (response: any) => {
             this.rows = response.data;
+            this.tempData = this.rows;
         },
         (error: any) => {
             this.handleError(error);

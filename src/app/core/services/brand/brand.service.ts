@@ -48,6 +48,15 @@ export class BrandService {
         );
     }
 
+    // filter by status
+    filterByStatus(status: string) {
+        return this.http.get(`${this.apUrl}/brand/filter-by-status/${status}`).pipe(
+            catchError((error) => {
+              return throwError(error);
+            })
+        );
+    }
+
     // delete brand
     deleteBrand(id: number) {
         return this.http.delete(`${this.apUrl}/brand/delete-brand/${id}`).pipe(

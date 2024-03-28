@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { ColumnMode, DatatableComponent } from '@swimlane/ngx-datatable';
 
 import { ToastrService } from 'ngx-toastr';
@@ -19,28 +19,13 @@ export class SubCategoryListComponent implements OnInit {
 
     public ColumnMode = ColumnMode;
 
-    public selectDateCreated: any = [
-      { id: 1, name: 'Today' , value: 'today'},
-      { id: 2, name: 'Yesterday' , value: 'yesterday'},
-      { id: 3, name: 'Last 7 Days' , value: 'last_7_days'},
-      { id: 4, name: 'Last 30 Days' , value: 'last_30_days'}
-    ];
+    // Decorator
+    @ViewChild(DatatableComponent) table: DatatableComponent;
 
-    public selectStatus: any = [
-      { id: 1, name: 'Active' , value: 'active'},
-      { id: 2, name: 'Inactive' , value: 'inactive'}
-    ];
-
-    public selectCategory: any = [
-      { id: 1, name: 'Category 1' , value: 'category_1'},
-      { id: 2, name: 'Category 2' , value: 'category_2'},
-      { id: 3, name: 'Category 3' , value: 'category_3'},
-      { id: 4, name: 'Category 4' , value: 'category_4'}
-    ];
+    // Private
+    private tempData = [];
 
     // selected values
-    public selectedDateCreated = [];
-    public selectedStatus = [];
     public selectedCategory = [];
     public searchValue = '';
 
@@ -71,20 +56,24 @@ export class SubCategoryListComponent implements OnInit {
       });
     }
 
-    filterByDateCreated($event: any) {
-        console.log (this.selectedDateCreated);
-    }
-
-    filterByStatus($event: any) {
-
-    }
-
     filterByCategory($event: any) {
 
     }
 
-    filterUpdate($event: KeyboardEvent) {
+    filterUpdate(event) {
+        // Reset ng-select on search
 
+        const val = event.target.value.toLowerCase();
+
+        // Filter Our Data
+        const temp = this.tempData.filter(function (d) {
+            return d.categoryName.toLowerCase().indexOf(val) !== -1 || !val;
+        });
+
+        // Update The Rows
+        this.rows = temp;
+        // Whenever The Filter Changes, Always Go Back To The First Page
+        this.table.offset = 0;
     }
 
     // get all sub categories
@@ -92,6 +81,7 @@ export class SubCategoryListComponent implements OnInit {
         this.subCategoryService.getAllSubCategories().subscribe(
         (response: any) => {
             this.rows = response.data;
+            this.tempData = this.rows;
         },
         (error: any) => {
             this.handleError(error);

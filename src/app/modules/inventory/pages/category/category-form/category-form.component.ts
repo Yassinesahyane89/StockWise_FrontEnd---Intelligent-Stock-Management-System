@@ -136,7 +136,7 @@ export class CategoryFormComponent implements OnInit {
                     {
                         name: 'Home',
                         isLink: true,
-                        link: '/'
+                        link: '/home'
                     },
                     {
                         name: 'Categories',
